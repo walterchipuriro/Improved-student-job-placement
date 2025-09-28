@@ -100,11 +100,59 @@ for col in label_encoders:
 input_df = pd.DataFrame([input_dict])
 
 # Make prediction
-if st.button("Predict Placement"):
-    if any(value == '' for key, value in input_dict.items()):
-        st.error("Please fill in all required fields.")
-    else:
-        input_df = pd.DataFrame([input_dict])
-        prediction = model.predict(input_df)[0]
-        st.success("Prediction: Placed ✅" if prediction == 1 else "Predicted: Not Placed ❌")
+# if st.button("Predict Placement"):
+#     if any(value == '' for key, value in input_dict.items()):
+#         st.error("Please fill in all required fields.")
+#     else:
+#         input_df = pd.DataFrame([input_dict])
+#         prediction = model.predict(input_df)[0]
+#         st.success("Prediction: Placed ✅" if prediction == 1 else "Predicted: Not Placed ❌")
 
+
+
+import shap
+
+if st.button("Predict Placement"):
+    input_df = pd.DataFrame([input_dict])
+    prediction = model.predict(input_df)[0]
+
+    # Show prediction result
+    st.success("Prediction: Placed ✅" if prediction == 1 else "Prediction: Not Placed ❌")
+
+    # Explain the prediction with SHAP
+    st.subheader("📊 Why This Prediction?")
+    explainer = shap.Explainer(model, input_df)
+    shap_values = explainer(input_df)
+
+    impact = pd.DataFrame({
+        "feature": input_df.columns,
+        "value": input_df.iloc[0].values,
+        "contribution": shap_values.values[0]
+    }).sort_values(by="contribution", key=abs, ascending=False)
+
+    for i, row in impact.head(3).iterrows():
+        symbol = "↑" if row["contribution"] > 0 else "↓"
+        st.markdown(f"- **{row['feature']}**: {row['value']} → Impact: {row['contribution']:.2f} {symbol}")
+
+    # Recommendations
+    st.subheader("💡 Recommendations to Improve Placement Chances")
+    recommendations = []
+
+    if input_dict["gpa"] < 6:
+        recommendations.append("📘 Improve GPA through focused studying or tutoring.")
+    if input_dict["soft_skills_score"] < 50:
+        recommendations.append("🗣️ Enhance your soft skills by practicing interviews or presentations.")
+    if input_dict["internship_count"] < 1:
+        recommendations.append("💼 Gain internship experience to boost your employability.")
+    if input_dict["project_count"] < 2:
+        recommendations.append("🔧 Complete more practical projects to showcase your skills.")
+    if input_dict["certification_count"] < 1:
+        recommendations.append("🎓 Get a certification in a technical skill (e.g., Python, SQL).")
+    if input_dict["technical_skills_score"] < 50:
+        recommendations.append("🧠 Strengthen your technical skills through online courses or coding practice.")
+
+    if recommendations:
+        for rec in recommendations:
+            st.markdown(f"- {rec}")
+    else:
+        st.success("✅ Excellent profile — keep applying confidently!")
