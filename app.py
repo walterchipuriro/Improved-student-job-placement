@@ -20,7 +20,7 @@ init_db()
 st.set_page_config(page_title="Placement Prediction", layout="wide")
 
 # ---- LOAD MODEL, SCALER AND EXPLAINER ----
-model = joblib.load("best_placement_model.pkl")
+model = joblib.load("best_advanced_placement_model.pkl")
 # model = joblib.load("ensemble_placement_model.pkl")
 scaler = joblib.load("scaler.pkl")
 # explainer = joblib.load("shap_explainer.pkl")
@@ -1495,4 +1495,5 @@ elif st.session_state.page == "counselor_explain":
     counselor_explain_page()
 elif st.session_state.page == "admin":
     admin_page()
+
 
