@@ -1,14 +1,11 @@
-xgboost==2.0.3
+# requirements.txt (clean)
+
+xgboost==2.0.3          # keep ONLY if any model still uses XGBoost
 scikit-learn==1.3.2
+joblib==1.3.2
 numpy
 pandas
 matplotlib
-joblib
 streamlit
-joblib
-pandas
-scikit-learn
 shap
 lime
-matplotlib
-streamlit
