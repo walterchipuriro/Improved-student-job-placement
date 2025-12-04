@@ -21,7 +21,7 @@ st.set_page_config(page_title="Placement Prediction", layout="wide")
 
 # ---- LOAD MODEL, SCALER AND EXPLAINER ----
 # model = joblib.load("best_placement_model.pkl")
-model = joblib.load("best_advanced_placement_model.pkl")
+model = joblib.load("best_baseline_model.pkl")
 scaler = joblib.load("scaler.pkl")
 # explainer = joblib.load("shap_explainer.pkl")
 
@@ -648,7 +648,7 @@ def register_page():
 #     set_background("G2.jpeg")
 
 #     # --- Load model and scaler ---
-#     model = joblib.load("best_placement_model.pkl")
+#     model = joblib.load("best_baseline_model.pkl")
 #     scaler = joblib.load("scaler.pkl")
 
 #     # --- Page title ---
@@ -858,7 +858,7 @@ def student_page():
     set_background("G2.jpeg")
 
     # --- Load model and scaler ---
-    model = joblib.load("best_advanced_placement_model.pkl")
+    model = joblib.load("best_baseline_model.pkl")
     scaler = joblib.load("scaler.pkl")
 
     # --- Page title ---
@@ -1266,7 +1266,7 @@ def counselor_explain_page():
     feature_names = X_eng_student.columns.tolist()
 
     # Load model and scaler (same as in student_page)
-    model = joblib.load("best_advanced_placement_model.pkl")
+    model = joblib.load("best_baseline_model.pkl")
     scaler = joblib.load("scaler.pkl")
 
     X_scaled_student = scaler.transform(X_eng_student.values)
@@ -1495,4 +1495,5 @@ elif st.session_state.page == "counselor_explain":
     counselor_explain_page()
 elif st.session_state.page == "admin":
     admin_page()
+
 
